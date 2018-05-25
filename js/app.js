@@ -5,6 +5,10 @@ class Budget {
     this.budget = Number(budget);
     this.budgetLeft = this.budget;
   }
+  //   subtracts from the budget
+  substractFromBudget(amount) {
+    return (this.budgetLeft -= amount);
+  }
 }
 
 // html content
@@ -49,6 +53,24 @@ class HTML {
     // inserting into the html
     expensesList.appendChild(li);
   }
+  //   subtract the expenses from the budget
+  trackBudget(amount) {
+    const budgetLeftDollars = budget.substractFromBudget(amount);
+    budgetLeft.innerHTML = `${budgetLeftDollars}`;
+
+    // change the color based on the budget left
+    if (budget.budget / 4 > budgetLeftDollars) {
+      // add classes to notify
+      budgetLeft.parentElement.parentElement.classList.remove(
+        "alert-success",
+        "alert-warning"
+      );
+      budgetLeft.parentElement.parentElement.classList.add("alert-danger");
+    } else if (budget.budget / 4 > budgetLeftDollars) {
+      budgetLeft.parentElement.parentElement.classList.remove("alert-success");
+      budgetLeft.parentElement.parentElement.classList.add("alert-warning");
+    }
+  }
 }
 
 // variables
@@ -89,6 +111,8 @@ function eventListeners() {
       html.printMessage("All the fields are mandatory", "alert-danger");
     } else {
       html.addExpenseToList(expenseName, amount);
+      html.trackBudget(amount);
+      html.printMessage("Added ...", "alert-success");
     }
   });
 }
